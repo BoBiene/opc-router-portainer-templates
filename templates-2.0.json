@@ -13,7 +13,7 @@
       ],
       "platform": "linux",
       "name": "opcua-to-mqtt",
-      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/logo.png",
+      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo.webp",
       "repository": {
         "url": "https://github.com/BoBiene/opc-router-portainer-templates",
         "stackfile": "opcua-to-mqtt/docker-compose.yml"
