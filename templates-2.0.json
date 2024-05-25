@@ -4,8 +4,8 @@
     {
       "type": 3,
       "title": "OPC UA to MQTT Stack",
-      "description": "This stack deploys an OPC UA PLC simulation, OPC Router, Mosquitto MQTT broker, and a management dashboard.",
-      "note": "This stack sets up an OPC UA PLC simulation, OPC Router for data handling, Mosquitto MQTT broker for messaging, and a management dashboard with Nginx.",
+      "description": "This stack deploys an OPC UA PLC simulation, OPC Router, Mosquitto MQTT broker, and a mqtt management.",
+      "note": "This stack sets up an OPC UA PLC simulation, OPC Router for data handling, Mosquitto MQTT broker for messaging, and a management from cedalo.<br/><br/><hr/><strong>After deployment</strong>, you can access the OPC Router and cedalo management via the exposed ports.<a href='http://localhost:40080'>http://localhost:40080</a>",
       "categories": [
         "edge",
         "messaging",
