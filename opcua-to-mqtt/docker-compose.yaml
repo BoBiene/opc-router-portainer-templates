@@ -1,0 +1,88 @@
+version: '3.8'
+
+x-project:
+  name: "opcua-to-mqtt"
+
+services:
+  opcrouter:
+    image: opcrouter/runtime:5.2
+    depends_on:
+      - init-config
+
+    environment:
+      - OR_DISABLE_AUTH=true
+      - OR_I_ACCEPT_EULA=true
+    ports:
+      - "40081:8080"
+    networks:
+      - opcua-to-mqtt-stack-network
+    volumes:
+      - opcrouter-data:/data
+
+  opc-ua-plc:
+    image: mcr.microsoft.com/iotedge/opc-plc:latest
+    command: "--autoaccept --veryfastrate=50"
+    networks:
+      - opcua-to-mqtt-stack-network
+
+  mqtt-broker:
+    image: eclipse-mosquitto:latest
+    depends_on:
+      - init-config
+    volumes:
+      - mosquitto-config:/mosquitto/config
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
+    networks:
+      - opcua-to-mqtt-stack-network
+
+  cedalo-mgmt:
+    image: cedalo/management-center:2
+    depends_on:
+      - mqtt-broker
+    environment:
+      CEDALO_MC_BROKER_ID: mosquitto-2.0
+      CEDALO_MC_BROKER_NAME: Mosquitto 2.0
+      CEDALO_MC_BROKER_URL: mqtt://mqtt-broker:1883
+      CEDALO_MC_BROKER_USERNAME: 
+      CEDALO_MC_BROKER_PASSWORD: 
+      CEDALO_MC_USERNAME: cedalo
+      CEDALO_MC_PASSWORD: cedalo
+    ports:
+      - "40088:8088"
+    networks:
+      - opcua-to-mqtt-stack-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "40080:80"
+    volumes:
+      - dashboard:/usr/share/nginx/html:ro
+    networks:
+      - opcua-to-mqtt-stack-network
+    depends_on:
+      - init-config
+
+  init-config:
+    image: alpine
+    command: >
+      sh -c "apk add git && 
+             git clone https://github.com/BoBiene/opc-router-portainer-templates /tmp/repo &&
+             cp /tmp/repo/opcua-to-mqtt/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
+             cp -r /tmp/repo/opcua-to-mqtt/config/dashboard/* /dashboard/"
+    volumes:
+      - mosquitto-config:/mosquitto/config
+      - dashboard:/dashboard
+    networks:
+      - opcua-to-mqtt-stack-network
+
+networks:
+  opcua-to-mqtt-stack-network:
+
+volumes:
+  mosquitto-config:
+  mosquitto-data:
+  mosquitto-log:
+  opcrouter-data:
+  dashboard:

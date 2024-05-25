@@ -1,0 +1,34 @@
+{
+  "type": 3,
+  "title": "OPC UA to MQTT Stack",
+  "description": "This stack deploys an OPC UA PLC simulation, OPC Router, Mosquitto MQTT broker, and a management dashboard.",
+  "note": "This stack sets up an OPC UA PLC simulation, OPC Router for data handling, Mosquitto MQTT broker for messaging, and a management dashboard with Nginx.",
+  "categories": ["edge", "messaging", "dashboard"],
+  "platform": "linux",
+  "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/logo.png",
+  "repository": {
+    "url": "https://github.com/BoBiene/opc-router-portainer-templates",
+    "stackfile": "opcua-to-mqtt/docker-compose.yml"
+  },
+  "env": [
+    {
+      "name": "INITIAL_USERNAME",
+      "label": "Initial Admin User",
+      "description": "The initial username for the OPC Router admin user.",
+      "default": "admin"
+    },
+    {
+      "name": "INITIAL_PASSWORD",
+      "label": "Initial Admin Password",
+      "description": "The initial password for the OPC Router admin user.",
+      "default": "admin"
+    },
+    {
+      "name": "OR_I_ACCEPT_EULA",
+      "label": "Accept EULA",
+      "description": "Accept the End User License Agreement",
+      "default": "true",
+      "preset": true
+    }
+  ]
+}
