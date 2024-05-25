@@ -13,12 +13,14 @@ services:
       - INITIAL_USERNAME=${INITIAL_USERNAME}
       - INITIAL_PASSWORD=${INITIAL_PASSWORD}
       - OR_I_ACCEPT_EULA=true
+      - OR_IMPORT_SOURCE=/config/project.rpe
     ports:
       - "40081:8080"
     networks:
       - stack-network
     volumes:
       - opcrouter-data:/data
+      - opcrouter-config:/config
 
   opc-ua-plc:
     image: mcr.microsoft.com/iotedge/opc-plc:latest
