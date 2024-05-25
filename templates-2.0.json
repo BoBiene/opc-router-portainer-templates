@@ -12,6 +12,7 @@
         "dashboard"
       ],
       "platform": "linux",
+      "name": "opcua-to-mqtt",
       "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/logo.png",
       "repository": {
         "url": "https://github.com/BoBiene/opc-router-portainer-templates",
@@ -21,13 +22,13 @@
         {
           "name": "INITIAL_USERNAME",
           "label": "Initial Admin User",
-          "description": "The initial username for the OPC Router admin user.",
+          "description": "The initial username for the OPC Router and cedalo admin user.",
           "default": "admin"
         },
         {
           "name": "INITIAL_PASSWORD",
           "label": "Initial Admin Password",
-          "description": "The initial password for the OPC Router admin user.",
+          "description": "The initial password for the OPC Router and cedalo admin user.",
           "default": "admin"
         },
         {
