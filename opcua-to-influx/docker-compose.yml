@@ -36,7 +36,7 @@ services:
       - DOCKER_INFLUXDB_INIT_PASSWORD=${INITIAL_PASSWORD}
       - DOCKER_INFLUXDB_INIT_ORG=opcrouter
       - DOCKER_INFLUXDB_INIT_BUCKET=opcua
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=opcrouter
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=OPCUA2InfluxDbAuthToken
       - DOCKER_INFLUXDB_INIT_RETENTION=1w
     networks:
       - stack-network
