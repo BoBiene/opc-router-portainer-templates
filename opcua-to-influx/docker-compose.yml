@@ -13,7 +13,7 @@ services:
       - INITIAL_USERNAME=${INITIAL_USERNAME}
       - INITIAL_PASSWORD=${INITIAL_PASSWORD}
     ports:
-      - "40101:8080"
+      - "40181:8080"
     networks:
       - stack-network
     volumes:
@@ -42,6 +42,18 @@ services:
       - stack-network
     volumes:
       - influxdb-data:/var/lib/influxdb
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "40180:80"
+    volumes:
+      - dashboard:/usr/share/nginx/html:ro
+    networks:
+      - stack-network
+    depends_on:
+      - init-config
+
 
   init-config:
     image: alpine

@@ -13,7 +13,7 @@
       ],
       "platform": "linux",
       "name": "opcua-to-mqtt",
-      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.webp",
+      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.png",
       "repository": {
         "url": "https://github.com/BoBiene/opc-router-portainer-templates",
         "stackfile": "opcua-to-mqtt/docker-compose.yml"
@@ -44,7 +44,7 @@
       "type": 3,
       "title": "OPC UA to InfluxDB Stack",
       "description": "This stack deploys an OPC UA PLC simulation, OPC Router, and InfluxDB.",
-      "note": "This stack sets up an OPC UA PLC simulation, OPC Router for data handling, and InfluxDB for data storage.<br/><br/><hr/><strong>After deployment</strong>, you can access the OPC Router and InfluxDB via the exposed ports.<a href='http://localhost:40101'>http://localhost:40101</a>",
+      "note": "This stack sets up an OPC UA PLC simulation, OPC Router for data handling, and InfluxDB for data storage.<br/><br/><hr/><strong>After deployment</strong>, you can access the OPC Router and InfluxDB via the exposed ports.<a href='http://localhost:40180'>http://localhost:40180</a>",
       "categories": [
         "edge",
         "database",
@@ -52,7 +52,7 @@
       ],
       "platform": "linux",
       "name": "opcua-to-influx",
-      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.webp",
+      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.png",
       "repository": {
         "url": "https://github.com/BoBiene/opc-router-portainer-templates",
         "stackfile": "opcua-to-influx/docker-compose.yml"
@@ -61,13 +61,13 @@
         {
           "name": "INITIAL_USERNAME",
           "label": "Initial Admin User",
-          "description": "The initial username for the OPC Router admin user.",
+          "description": "The initial username for the OPC Router and influxDB admin user.",
           "default": "admin"
         },
         {
           "name": "INITIAL_PASSWORD",
           "label": "Initial Admin Password",
-          "description": "The initial password for the OPC Router admin user.",
+          "description": "The initial password for the OPC Router and influxDB admin user.",
           "default": "admin"
         },
         {
@@ -91,7 +91,7 @@
       ],
       "platform": "linux",
       "name": "opcua-to-rest",
-      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.webp",
+      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.png",
       "repository": {
         "url": "https://github.com/BoBiene/opc-router-portainer-templates",
         "stackfile": "opcua-to-rest/docker-compose.yml"
@@ -130,7 +130,7 @@
       ],
       "platform": "linux",
       "name": "mqtt-to-email",
-      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.webp",
+      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.png",
       "repository": {
         "url": "https://github.com/BoBiene/opc-router-portainer-templates",
         "stackfile": "mqtt-to-email/docker-compose.yml"
@@ -169,7 +169,7 @@
       ],
       "platform": "linux",
       "name": "smb-to-mqtt",
-      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.webp",
+      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.png",
       "repository": {
         "url": "https://github.com/BoBiene/opc-router-portainer-templates",
         "stackfile": "smb-to-mqtt/docker-compose.yml"
@@ -208,7 +208,7 @@
       ],
       "platform": "linux",
       "name": "ftp-to-mqtt",
-      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.webp",
+      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.png",
       "repository": {
         "url": "https://github.com/BoBiene/opc-router-portainer-templates",
         "stackfile": "ftp-to-mqtt/docker-compose.yml"
