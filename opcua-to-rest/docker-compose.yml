@@ -30,6 +30,8 @@ services:
     image: nginxdemos/hello:latest
     ports:
       - "40282:80"
+    environment:
+      - CREATE_SESSION=00000000-0000-0000-0000-000000000000
     networks:
       - stack-network
 
@@ -50,7 +52,7 @@ services:
       sh -c "apk add git && 
              git clone https://github.com/BoBiene/opc-router-portainer-templates /tmp/repo &&
              cp /tmp/repo/opcua-to-rest/config/opc-router.rpe /inray/project.rpe"&&
-             cp -r /tmp/repo/opcua-to-influx/config/dashboard/* /dashboard/"
+             cp -r /tmp/repo/opcua-to-rest/config/dashboard/* /dashboard/"
     volumes:
       - opcrouter-config:/inray
       - dashboard:/dashboard

@@ -83,7 +83,7 @@
       "type": 3,
       "title": "OPC UA to REST Stack",
       "description": "This stack deploys an OPC UA PLC simulation, OPC Router, and a Webhook Tester.",
-      "note": "This stack sets up an OPC UA PLC simulation, OPC Router for data handling, and a Webhook Tester for REST endpoint simulation.<br/><br/><hr/><strong>After deployment</strong>, you can access the OPC Router and Webhook Tester via the exposed ports.<a href='http://localhost:40201'>http://localhost:40201</a>",
+      "note": "This stack sets up an OPC UA PLC simulation, OPC Router for data handling, and a Webhook Tester for REST endpoint simulation.<br/><br/><hr/><strong>After deployment</strong>, you can access the OPC Router and Webhook Tester via the exposed ports.<a href='http://localhost:40280'>http://localhost:40280</a>",
       "categories": [
         "edge",
         "web",
