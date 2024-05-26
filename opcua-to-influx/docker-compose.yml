@@ -61,6 +61,7 @@ services:
     command: >
       sh -c "apk add git && 
              git clone https://github.com/BoBiene/opc-router-portainer-templates /tmp/repo &&
+             cp /tmp/repo/opcua-to-mqtt/config/opc-router.rpe /inray/project.rpe &&
              cp -r /tmp/repo/opcua-to-influx/config/dashboard/* /dashboard/"
     volumes:
       - opcrouter-config:/inray
