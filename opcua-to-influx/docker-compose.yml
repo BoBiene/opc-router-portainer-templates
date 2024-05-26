@@ -41,7 +41,8 @@ services:
     networks:
       - stack-network
     volumes:
-      - influxdb-data:/var/lib/influxdb
+      - influxdb-data:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
 
   nginx:
     image: nginx:latest
@@ -74,4 +75,5 @@ volumes:
   opcrouter-config:
   opcrouter-data:
   influxdb-data:
+  influxdb-config:
   dashboard:
