@@ -27,7 +27,7 @@ services:
       - stack-network
   
   webhook-tester:
-    image: nginxdemos/hello:latest
+    image: tarampampam/webhook-tester:latest
     ports:
       - "40282:80"
     environment:
@@ -51,7 +51,7 @@ services:
     command: >
       sh -c "apk add git && 
              git clone https://github.com/BoBiene/opc-router-portainer-templates /tmp/repo &&
-             cp /tmp/repo/opcua-to-rest/config/opc-router.rpe /inray/project.rpe"&&
+             cp /tmp/repo/opcua-to-rest/config/opc-router.rpe /inray/project.rpe &&
              cp -r /tmp/repo/opcua-to-rest/config/dashboard/* /dashboard/"
     volumes:
       - opcrouter-config:/inray
