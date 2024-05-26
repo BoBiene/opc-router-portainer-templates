@@ -196,4 +196,44 @@
         }
       ]
     },
-   
+    {
+      "type": 3,
+      "title": "FTP to MQTT Stack",
+      "description": "This stack deploys an OPC Router, Mosquitto MQTT broker, FTP server, and Filebrowser.",
+      "note": "This stack sets up an OPC Router for data handling, Mosquitto MQTT broker for messaging, FTP server for file transfer, and Filebrowser for managing files.<br/><br/><hr/><strong>After deployment</strong>, you can access the OPC Router and Filebrowser via the exposed ports.<a href='http://localhost:40501'>http://localhost:40501</a>",
+      "categories": [
+        "file",
+        "messaging",
+        "management"
+      ],
+      "platform": "linux",
+      "name": "ftp-to-mqtt",
+      "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.png",
+      "repository": {
+        "url": "https://github.com/BoBiene/opc-router-portainer-templates",
+        "stackfile": "ftp-to-mqtt/docker-compose.yml"
+      },
+      "env": [
+        {
+          "name": "INITIAL_USERNAME",
+          "label": "Initial Admin User",
+          "description": "The initial username for the OPC Router admin user.",
+          "default": "admin"
+        },
+        {
+          "name": "INITIAL_PASSWORD",
+          "label": "Initial Admin Password",
+          "description": "The initial password for the OPC Router admin user. The password must be at least 12 characters long.",
+          "default": "OPCRouterStack"
+        },
+        {
+          "name": "OR_I_ACCEPT_EULA",
+          "label": "Accept EULA",
+          "description": "Accept the End User License Agreement",
+          "default": "true",
+          "preset": true
+        }
+      ]
+    }
+  ]
+}
