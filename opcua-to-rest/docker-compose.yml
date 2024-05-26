@@ -7,7 +7,6 @@ services:
   opcrouter:
     image: opcrouter/runtime:5.2
     environment:
-      - OR_DISABLE_AUTH=true
       - OR_I_ACCEPT_EULA=true
       - OR_IMPORT_SOURCE=/inray/project.rpe
       - INITIAL_USERNAME=${INITIAL_USERNAME}
@@ -29,7 +28,7 @@ services:
   webhook-tester:
     image: tarampampam/webhook-tester:latest
     ports:
-      - "40282:80"
+      - "40282:8080"
     environment:
       - CREATE_SESSION=00000000-0000-0000-0000-000000000000
     networks:
