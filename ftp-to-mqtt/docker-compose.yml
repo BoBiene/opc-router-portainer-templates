@@ -1,0 +1,94 @@
+version: '3.8'
+
+x-project:
+  name: "ftp-to-mqtt"
+
+services:
+  opcrouter:
+    image: opcrouter/runtime:5.2
+    environment:
+      - OR_DISABLE_AUTH=true
+      - OR_I_ACCEPT_EULA=true
+      - OR_IMPORT_SOURCE=/inray/project.rpe
+      - INITIAL_USERNAME=${INITIAL_USERNAME}
+      - INITIAL_PASSWORD=${INITIAL_PASSWORD}
+    ports:
+      - "40501:8080"
+    networks:
+      - stack-network
+    volumes:
+      - opcrouter-data:/data
+      - opcrouter-config:/inray
+      - shared-data:/shared
+
+  mqtt-broker:
+    image: eclipse-mosquitto:latest
+    ports:
+      - "1883:1883"
+    networks:
+      - stack-network
+    volumes:
+      - mosquitto-config:/mosquitto/config
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
+
+  cedalo-mgmt:
+    image: cedalo/management-center:2
+    depends_on:
+      - mqtt-broker
+    environment:
+      CEDALO_MC_BROKER_ID: mosquitto-2.0
+      CEDALO_MC_BROKER_NAME: Mosquitto 2.0
+      CEDALO_MC_BROKER_URL: mqtt://mqtt-broker:1883
+      CEDALO_MC_BROKER_USERNAME: 
+      CEDALO_MC_BROKER_PASSWORD: 
+      CEDALO_MC_USERNAME: cedalo
+      CEDALO_MC_PASSWORD: cedalo
+    ports:
+      - "40503:8088"
+    networks:
+      - stack-network
+
+  ftp-server:
+    image: delfer/alpine-ftp-server:latest
+    ports:
+      - "21:21"
+      - "21000-21010:21000-21010"
+    environment:
+      - USERS=one|1234
+      - ADDRESS=ftp.site.domain
+    networks:
+      - stack-network
+    volumes:
+      - shared-data:/home/ftpusers
+
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    ports:
+      - "40502:80"
+    networks:
+      - stack-network
+    volumes:
+      - shared-data:/srv
+
+  init-config:
+    image: alpine
+    command: >
+      sh -c "apk add git &&
+             git clone https://github.com/BoBiene/opc-router-portainer-templates /tmp/repo &&
+             cp /tmp/repo/ftp-to-mqtt/config/opc-router.rpe /inray/project.rpe"
+    volumes:
+      - opcrouter-config:/inray
+    networks:
+      - stack-network
+
+networks:
+  stack-network:
+
+volumes:
+  mosquitto-config:
+  mosquitto-data:
+  mosquitto-log:
+  shared-data:
+  opcrouter-config:
+  opcrouter-data:

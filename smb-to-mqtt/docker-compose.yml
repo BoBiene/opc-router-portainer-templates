@@ -1,0 +1,91 @@
+version: '3.8'
+
+x-project:
+  name: "smb-to-mqtt"
+
+services:
+  opcrouter:
+    image: opcrouter/runtime:5.2
+    environment:
+      - OR_DISABLE_AUTH=true
+      - OR_I_ACCEPT_EULA=true
+      - OR_IMPORT_SOURCE=/inray/project.rpe
+      - INITIAL_USERNAME=${INITIAL_USERNAME}
+      - INITIAL_PASSWORD=${INITIAL_PASSWORD}
+    ports:
+      - "40401:8080"
+    networks:
+      - stack-network
+    volumes:
+      - opcrouter-data:/data
+      - opcrouter-config:/inray
+      - shared-data:/shared
+
+  mqtt-broker:
+    image: eclipse-mosquitto:latest
+    ports:
+      - "1883:1883"
+    networks:
+      - stack-network
+    volumes:
+      - mosquitto-config:/mosquitto/config
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
+
+  cedalo-mgmt:
+    image: cedalo/management-center:2
+    depends_on:
+      - mqtt-broker
+    environment:
+      CEDALO_MC_BROKER_ID: mosquitto-2.0
+      CEDALO_MC_BROKER_NAME: Mosquitto 2.0
+      CEDALO_MC_BROKER_URL: mqtt://mqtt-broker:1883
+      CEDALO_MC_BROKER_USERNAME: 
+      CEDALO_MC_BROKER_PASSWORD: 
+      CEDALO_MC_USERNAME: cedalo
+      CEDALO_MC_PASSWORD: cedalo
+    ports:
+      - "40403:8088"
+    networks:
+      - stack-network
+
+  smb-server:
+    image: dperson/samba:latest
+    command: '-p'
+    ports:
+      - "445:445"
+    networks:
+      - stack-network
+    volumes:
+      - shared-data:/mount
+
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    ports:
+      - "40402:80"
+    networks:
+      - stack-network
+    volumes:
+      - shared-data:/srv
+
+  init-config:
+    image: alpine
+    command: >
+      sh -c "apk add git &&
+             git clone https://github.com/BoBiene/opc-router-portainer-templates /tmp/repo &&
+             cp /tmp/repo/smb-to-mqtt/config/opc-router.rpe /inray/project.rpe"
+    volumes:
+      - opcrouter-config:/inray
+    networks:
+      - stack-network
+
+networks:
+  stack-network:
+
+volumes:
+  mosquitto-config:
+  mosquitto-data:
+  mosquitto-log:
+  shared-data:
+  opcrouter-config:
+  opcrouter-data:
