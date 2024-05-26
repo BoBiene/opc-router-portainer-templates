@@ -13,9 +13,9 @@ services:
       - INITIAL_USERNAME=${INITIAL_USERNAME}
       - INITIAL_PASSWORD=${INITIAL_PASSWORD}
     ports:
-      - "40201:8080"
+      - "40281:8080"
     networks:
-      - opcua-to-rest-stack-network
+      - stack-network
     volumes:
       - opcrouter-data:/data
       - opcrouter-config:/inray
@@ -24,29 +24,43 @@ services:
     image: mcr.microsoft.com/iotedge/opc-plc:latest
     command: "--autoaccept --veryfastrate=50"
     networks:
-      - opcua-to-rest-stack-network
-
+      - stack-network
+  
   webhook-tester:
     image: nginxdemos/hello:latest
     ports:
-      - "40202:80"
+      - "40282:80"
     networks:
-      - opcua-to-rest-stack-network
+      - stack-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "40280:80"
+    volumes:
+      - dashboard:/usr/share/nginx/html:ro
+    networks:
+      - stack-network
+    depends_on:
+      - init-config
 
   init-config:
     image: alpine
     command: >
       sh -c "apk add git && 
              git clone https://github.com/BoBiene/opc-router-portainer-templates /tmp/repo &&
-             cp /tmp/repo/opcua-to-rest/config/opc-router.rpe /inray/project.rpe"
+             cp /tmp/repo/opcua-to-rest/config/opc-router.rpe /inray/project.rpe"&&
+             cp -r /tmp/repo/opcua-to-influx/config/dashboard/* /dashboard/"
     volumes:
       - opcrouter-config:/inray
+      - dashboard:/dashboard
     networks:
-      - opcua-to-rest-stack-network
+      - stack-network
 
 networks:
-  opcua-to-rest-stack-network:
+  stack-network:
 
 volumes:
   opcrouter-config:
   opcrouter-data:
+  dashboard:

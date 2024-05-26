@@ -9,24 +9,27 @@
 <body>
     <div class="container-md mt-5">
         <h1 class="text-center mb-5">OPC UA to REST Stack</h1>
+        <div class="alert alert-info" role="alert">
+            Default username: <strong>admin</strong> <span class="d-none d-sm-inline">|</span><br class="d-sm-none" /> Default password: <strong>OPCRouterStack</strong>
+        </div>
         <div class="row">
             <div class="col-sm-6 mb-3">
                 <div class="card h-100">
                     <img src="img/opc-router-logo-2x-400x108.webp" class="card-img-top p-4" alt="OPC Router Logo">
                     <div class="card-body">
                         <h5 class="card-title">OPC Router</h5>
-                        <p class="card-text">Verwaltung des OPC Routers.</p>
-                        <a href="http://localhost:40201" target="_blank" class="btn btn-primary">Zum OPC Router</a>
+                        <p class="card-text">The OPC Router connects to an OPC UA Server and recieved the datachanges and calls the REST-Endpoint transmitting each datachange as JSON.</p>
+                        <a href="http://localhost:40201" target="_blank" class="btn btn-primary">Open OPC Router Web-Management</a>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 mb-3">
                 <div class="card h-100">
-                    <img src="img/webhook-tester-logo.png" class="card-img-top p-4" alt="Webhook Tester Logo">
+                    <img src="img/rest-logo.png" class="card-img-top p-4" alt="Webhook Tester Logo">
                     <div class="card-body">
-                        <h5 class="card-title">Webhook Tester</h5>
-                        <p class="card-text">Verwaltung des Webhook Testers.</p>
-                        <a href="http://localhost:40202" target="_blank" class="btn btn-primary">Zum Webhook Tester</a>
+                        <h5 class="card-title">REST Endpoint</h5>
+                        <p class="card-text">The REST-Endpoint is provided with the WebHook Tester a solution to provide a generic REST Endpoint and provide a UI to see all recieved calls.</p>
+                        <a href="http://localhost:40202" target="_blank" class="btn btn-primary">Open REST Interface</a>
                     </div>
                 </div>
             </div>
