@@ -6,14 +6,15 @@ x-project:
 services:
   opcrouter:
     image: opcrouter/runtime:5.2
+    pull_policy: always
     environment:
-      - OR_DISABLE_AUTH=true
       - OR_I_ACCEPT_EULA=true
       - OR_IMPORT_SOURCE=/inray/project.rpe
       - INITIAL_USERNAME=${INITIAL_USERNAME}
       - INITIAL_PASSWORD=${INITIAL_PASSWORD}
     ports:
-      - "40301:8080"
+      - "40381:8080"
+      - "40383:46065"
     networks:
       - stack-network
     volumes:
@@ -22,8 +23,8 @@ services:
 
   mqtt-broker:
     image: eclipse-mosquitto:latest
-    ports:
-      - "1883:1883"
+    depends_on:
+      - init-config
     networks:
       - stack-network
     volumes:
@@ -41,29 +42,43 @@ services:
       CEDALO_MC_BROKER_URL: mqtt://mqtt-broker:1883
       CEDALO_MC_BROKER_USERNAME: 
       CEDALO_MC_BROKER_PASSWORD: 
-      CEDALO_MC_USERNAME: cedalo
-      CEDALO_MC_PASSWORD: cedalo
+      CEDALO_MC_USERNAME: ${INITIAL_USERNAME}
+      CEDALO_MC_PASSWORD: ${INITIAL_PASSWORD}
     ports:
-      - "40303:8088"
+      - "40388:8088"
     networks:
       - stack-network
 
   smtp4dev:
     image: rnwood/smtp4dev:latest
     ports:
-      - "40302:80"
-      - "25:25"
+      - "40382:80"
     networks:
       - stack-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "40380:80"
+    volumes:
+      - dashboard:/usr/share/nginx/html:ro
+    networks:
+      - stack-network
+    depends_on:
+      - init-config
 
   init-config:
     image: alpine
     command: >
       sh -c "apk add git && 
              git clone https://github.com/BoBiene/opc-router-portainer-templates /tmp/repo &&
-             cp /tmp/repo/mqtt-to-email/config/opc-router.rpe /inray/project.rpe"
+             cp /tmp/repo/mqtt-to-email/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
+             cp /tmp/repo/mqtt-to-email/config/opc-router.rpe /inray/project.rpe &&
+             cp -r /tmp/repo/opcua-to-mqtt/config/dashboard/* /dashboard/"
     volumes:
+      - mosquitto-config:/mosquitto/config
       - opcrouter-config:/inray
+      - dashboard:/dashboard
     networks:
       - stack-network
 
@@ -76,3 +91,4 @@ volumes:
   mosquitto-log:
   opcrouter-config:
   opcrouter-data:
+  dashboard:
