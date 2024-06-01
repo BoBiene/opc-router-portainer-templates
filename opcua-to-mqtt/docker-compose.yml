@@ -6,8 +6,10 @@ x-project:
 services:
   opcrouter:
     image: opcrouter/runtime:5.2
+    pull_policy: always
     depends_on:
-      - init-config
+      init-config:
+        condition: service_completed_successfully
 
     environment:
       - INITIAL_USERNAME=${INITIAL_USERNAME}
@@ -31,7 +33,8 @@ services:
   mqtt-broker:
     image: eclipse-mosquitto:latest
     depends_on:
-      - init-config
+      init-config:
+        condition: service_completed_successfully
     volumes:
       - mosquitto-config:/mosquitto/config
       - mosquitto-data:/mosquitto/data

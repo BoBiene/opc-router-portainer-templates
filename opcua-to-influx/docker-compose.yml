@@ -6,6 +6,10 @@ x-project:
 services:
   opcrouter:
     image: opcrouter/runtime:5.2
+    pull_policy: always
+    depends_on:
+      init-config:
+        condition: service_completed_successfully
     environment:
       - OR_I_ACCEPT_EULA=true
       - OR_IMPORT_SOURCE=/inray/project.rpe
