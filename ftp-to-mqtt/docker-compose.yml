@@ -75,8 +75,8 @@ services:
     image: alpine
     command: >
       sh -c "wget https://github.com/BoBiene/opc-router-portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
-             unzip -q /tmp/repo.zip -d /tmp &&
-             cp /tmp/ftp-to-mqtt/config/opc-router.rpe /inray/project.rpe"
+             unzip -qo /tmp/repo.zip -d /tmp &&
+             cp /tmp/opc-router-portainer-templates-main/ftp-to-mqtt/config/opc-router.rpe /inray/project.rpe"
     volumes:
       - opcrouter-config:/inray
     networks:

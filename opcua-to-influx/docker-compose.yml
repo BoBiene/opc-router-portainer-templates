@@ -62,9 +62,9 @@ services:
     image: alpine
     command: >
       sh -c "wget https://github.com/BoBiene/opc-router-portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
-             unzip -q /tmp/repo.zip -d /tmp &&
-             cp /tmp/opcua-to-influx/config/opc-router.rpe /inray/project.rpe &&
-             cp -r /tmp/opcua-to-influx/config/dashboard/* /dashboard/"
+             unzip -qo /tmp/repo.zip -d /tmp &&
+             cp /tmp/opc-router-portainer-templates-main/opcua-to-influx/config/opc-router.rpe /inray/project.rpe &&
+             cp -r /tmp/opc-router-portainer-templates-main/opcua-to-influx/config/dashboard/* /dashboard/"
     volumes:
       - opcrouter-config:/inray
       - dashboard:/dashboard

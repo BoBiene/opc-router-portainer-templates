@@ -66,18 +66,20 @@ services:
     volumes:
       - dashboard:/usr/share/nginx/html:ro
     networks:
-      - stack-network
+      - stack-network 
     depends_on:
       - init-config
 
   init-config:
     image: alpine
     command: >
-      sh -c "wget https://github.com/BoBiene/opc-router-portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
-             unzip -q /tmp/repo.zip -d /tmp &&
-             cp /tmp/opcua-to-mqtt/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
-             cp /tmp/opcua-to-mqtt/config/opc-router.rpe /inray/project.rpe &&
-             cp -r /tmp/opcua-to-mqtt/config/dashboard/* /dashboard/"
+      sh -c "apk add --no-cache unzip &&
+             wget https://github.com/BoBiene/opc-router-portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
+             unzip --help &&
+             unzip -o /tmp/repo.zip -d /tmp  &&
+             cp /tmp/opc-router-portainer-templates-main/opcua-to-mqtt/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
+             cp /tmp/opc-router-portainer-templates-main/opcua-to-mqtt/config/opc-router.rpe /inray/project.rpe &&
+             cp -r /tmp/opc-router-portainer-templates-main/opcua-to-mqtt/config/dashboard/* /dashboard/"
     volumes:
       - mosquitto-config:/mosquitto/config
       - dashboard:/dashboard

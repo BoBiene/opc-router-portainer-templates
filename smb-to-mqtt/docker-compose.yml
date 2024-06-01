@@ -93,10 +93,10 @@ services:
     image: alpine
     command: >
       sh -c "wget https://github.com/BoBiene/opc-router-portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
-             unzip -q /tmp/repo.zip -d /tmp &&
-             cp /tmp/opc-router-portainer-templates-main/smb-to-mqtt/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
-             cp /tmp/opc-router-portainer-templates-main/smb-to-mqtt/config/opc-router.rpe /inray/project.rpe &&
-             cp -r /tmp/opc-router-portainer-templates-main/smb-to-mqtt/config/dashboard/* /dashboard/"
+             unzip -qo /tmp/repo.zip -d /tmp &&
+             cp /tmp/opc-router-portainer-templates-main/opc-router-portainer-templates-main/smb-to-mqtt/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
+             cp /tmp/opc-router-portainer-templates-main/opc-router-portainer-templates-main/smb-to-mqtt/config/opc-router.rpe /inray/project.rpe &&
+             cp -r /tmp/opc-router-portainer-templates-main/opc-router-portainer-templates-main/smb-to-mqtt/config/dashboard/* /dashboard/"
     volumes:
       - mosquitto-config:/mosquitto/config
       - opcrouter-config:/inray
