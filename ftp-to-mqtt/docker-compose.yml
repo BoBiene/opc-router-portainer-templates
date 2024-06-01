@@ -76,7 +76,7 @@ services:
     command: >
       sh -c "wget https://github.com/BoBiene/opc-router-portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
              unzip -q /tmp/repo.zip -d /tmp &&
-             cp /tmp/repo/ftp-to-mqtt/config/opc-router.rpe /inray/project.rpe"
+             cp /tmp/ftp-to-mqtt/config/opc-router.rpe /inray/project.rpe"
     volumes:
       - opcrouter-config:/inray
     networks:
