@@ -8,7 +8,8 @@ services:
     image: opcrouter/runtime:5.2
     pull_policy: always
     depends_on:
-      - init-config
+      init-config:
+        condition: service_healthy
     environment:
       - OR_I_ACCEPT_EULA=true
       - OR_IMPORT_SOURCE=/inray/project.rpe
@@ -26,7 +27,8 @@ services:
   mqtt-broker:
     image: eclipse-mosquitto:latest
     depends_on:
-      - init-config
+      init-config:
+        condition: service_healthy
     networks:
       - stack-network
     volumes:
@@ -37,7 +39,8 @@ services:
   cedalo-mgmt:
     image: cedalo/management-center:2
     depends_on:
-      - mqtt-broker
+      mqtt-broker:
+        condition: service_healthy
     environment:
       CEDALO_MC_BROKER_ID: mosquitto-2.0
       CEDALO_MC_BROKER_NAME: Mosquitto 2.0
