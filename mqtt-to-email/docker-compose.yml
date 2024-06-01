@@ -7,6 +7,8 @@ services:
   opcrouter:
     image: opcrouter/runtime:5.2
     pull_policy: always
+    depends_on:
+      - init-config
     environment:
       - OR_I_ACCEPT_EULA=true
       - OR_IMPORT_SOURCE=/inray/project.rpe
@@ -74,13 +76,20 @@ services:
              git clone https://github.com/BoBiene/opc-router-portainer-templates /tmp/repo &&
              cp /tmp/repo/mqtt-to-email/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
              cp /tmp/repo/mqtt-to-email/config/opc-router.rpe /inray/project.rpe &&
-             cp -r /tmp/repo/mqtt-to-email/config/dashboard/* /dashboard/"
+             cp -r /tmp/repo/mqtt-to-email/config/dashboard/* /dashboard/ &&
+             touch /init-done &&
+             tail -f /dev/null"
     volumes:
       - mosquitto-config:/mosquitto/config
       - opcrouter-config:/inray
       - dashboard:/dashboard
     networks:
       - stack-network
+    healthcheck:
+      test: ["CMD", "sh", "-c", "test -f /init-done"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   stack-network:
