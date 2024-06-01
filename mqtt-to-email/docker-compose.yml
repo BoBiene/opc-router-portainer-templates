@@ -74,7 +74,7 @@ services:
              git clone https://github.com/BoBiene/opc-router-portainer-templates /tmp/repo &&
              cp /tmp/repo/mqtt-to-email/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
              cp /tmp/repo/mqtt-to-email/config/opc-router.rpe /inray/project.rpe &&
-             cp -r /tmp/repo/opcua-to-mqtt/config/dashboard/* /dashboard/"
+             cp -r /tmp/repo/mqtt-to-email/config/dashboard/* /dashboard/"
     volumes:
       - mosquitto-config:/mosquitto/config
       - opcrouter-config:/inray
