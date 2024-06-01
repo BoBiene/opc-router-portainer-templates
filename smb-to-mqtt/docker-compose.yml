@@ -6,6 +6,10 @@ x-project:
 services:
   opcrouter:
     image: opcrouter/runtime:5.2
+    pull_policy: always
+    depends_on:
+      init-config:
+        condition: service_completed_successfully
     environment:
       - OR_DISABLE_AUTH=true
       - OR_I_ACCEPT_EULA=true
@@ -13,18 +17,19 @@ services:
       - INITIAL_USERNAME=${INITIAL_USERNAME}
       - INITIAL_PASSWORD=${INITIAL_PASSWORD}
     ports:
-      - "40401:8080"
+      - "40481:8080"
     networks:
       - stack-network
     volumes:
       - opcrouter-data:/data
       - opcrouter-config:/inray
-      - shared-data:/shared
+      # - shared-data:/shared
 
   mqtt-broker:
     image: eclipse-mosquitto:latest
-    ports:
-      - "1883:1883"
+    depends_on:
+      init-config:
+        condition: service_completed_successfully
     networks:
       - stack-network
     volumes:
@@ -35,7 +40,8 @@ services:
   cedalo-mgmt:
     image: cedalo/management-center:2
     depends_on:
-      - mqtt-broker
+      mqtt-broker:
+        condition: service_started
     environment:
       CEDALO_MC_BROKER_ID: mosquitto-2.0
       CEDALO_MC_BROKER_NAME: Mosquitto 2.0
@@ -45,15 +51,15 @@ services:
       CEDALO_MC_USERNAME: cedalo
       CEDALO_MC_PASSWORD: cedalo
     ports:
-      - "40403:8088"
+      - "40488:8088"
     networks:
       - stack-network
 
   smb-server:
     image: dperson/samba:latest
     command: '-p'
-    ports:
-      - "445:445"
+    # ports:
+    #   - "445:445"
     networks:
       - stack-network
     volumes:
@@ -61,21 +67,40 @@ services:
 
   filebrowser:
     image: filebrowser/filebrowser:latest
+    environment:
+      - FB_NOAUTH=true
+      - FB_USERNAME=${INITIAL_USERNAME}
+      - FB_PASSWORD=${INITIAL_PASSWORD}
     ports:
-      - "40402:80"
+      - "40482:80"
     networks:
       - stack-network
     volumes:
       - shared-data:/srv
 
+  nginx:
+    image: nginx:latest
+    ports:
+      - "40480:80"
+    volumes:
+      - dashboard:/usr/share/nginx/html:ro
+    networks:
+      - stack-network
+    depends_on:
+      - init-config
+  
   init-config:
     image: alpine
     command: >
-      sh -c "apk add git &&
-             git clone https://github.com/BoBiene/opc-router-portainer-templates /tmp/repo &&
-             cp /tmp/repo/smb-to-mqtt/config/opc-router.rpe /inray/project.rpe"
+      sh -c "wget https://github.com/BoBiene/opc-router-portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
+             unzip -q /tmp/repo.zip -d /tmp &&
+             cp /tmp/opc-router-portainer-templates-main/smb-to-mqtt/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
+             cp /tmp/opc-router-portainer-templates-main/smb-to-mqtt/config/opc-router.rpe /inray/project.rpe &&
+             cp -r /tmp/opc-router-portainer-templates-main/smb-to-mqtt/config/dashboard/* /dashboard/"
     volumes:
+      - mosquitto-config:/mosquitto/config
       - opcrouter-config:/inray
+      - dashboard:/dashboard
     networks:
       - stack-network
 
@@ -87,5 +112,6 @@ volumes:
   mosquitto-data:
   mosquitto-log:
   shared-data:
+  dashboard:
   opcrouter-config:
   opcrouter-data:

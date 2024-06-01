@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 x-project:
   name: "mqtt-to-email"
@@ -45,8 +45,8 @@ services:
       CEDALO_MC_BROKER_ID: mosquitto-2.0
       CEDALO_MC_BROKER_NAME: Mosquitto 2.0
       CEDALO_MC_BROKER_URL: mqtt://mqtt-broker:1883
-      CEDALO_MC_BROKER_USERNAME: 
-      CEDALO_MC_BROKER_PASSWORD: 
+      CEDALO_MC_BROKER_USERNAME:
+      CEDALO_MC_BROKER_PASSWORD:
       CEDALO_MC_USERNAME: ${INITIAL_USERNAME}
       CEDALO_MC_PASSWORD: ${INITIAL_PASSWORD}
     ports:
@@ -75,8 +75,8 @@ services:
   init-config:
     image: alpine
     command: >
-      sh -c "apk add git && 
-             git clone https://github.com/BoBiene/opc-router-portainer-templates /tmp/repo &&
+      sh -c "wget https://github.com/BoBiene/opc-router-portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
+             unzip -q /tmp/repo.zip -d /tmp &&
              cp /tmp/repo/mqtt-to-email/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
              cp /tmp/repo/mqtt-to-email/config/opc-router.rpe /inray/project.rpe &&
              cp -r /tmp/repo/mqtt-to-email/config/dashboard/* /dashboard/"

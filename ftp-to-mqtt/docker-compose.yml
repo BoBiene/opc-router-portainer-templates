@@ -74,8 +74,8 @@ services:
   init-config:
     image: alpine
     command: >
-      sh -c "apk add git &&
-             git clone https://github.com/BoBiene/opc-router-portainer-templates /tmp/repo &&
+      sh -c "wget https://github.com/BoBiene/opc-router-portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
+             unzip -q /tmp/repo.zip -d /tmp &&
              cp /tmp/repo/ftp-to-mqtt/config/opc-router.rpe /inray/project.rpe"
     volumes:
       - opcrouter-config:/inray
