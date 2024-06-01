@@ -9,7 +9,7 @@ services:
     pull_policy: always
     depends_on:
       init-config:
-        condition: service_healthy
+        condition: service_completed_successfully
     environment:
       - OR_I_ACCEPT_EULA=true
       - OR_IMPORT_SOURCE=/inray/project.rpe
@@ -28,7 +28,7 @@ services:
     image: eclipse-mosquitto:latest
     depends_on:
       init-config:
-        condition: service_healthy
+        condition: service_completed_successfully
     networks:
       - stack-network
     volumes:
@@ -40,7 +40,7 @@ services:
     image: cedalo/management-center:2
     depends_on:
       mqtt-broker:
-        condition: service_healthy
+        condition: service_started
     environment:
       CEDALO_MC_BROKER_ID: mosquitto-2.0
       CEDALO_MC_BROKER_NAME: Mosquitto 2.0
@@ -80,19 +80,18 @@ services:
              cp /tmp/repo/mqtt-to-email/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
              cp /tmp/repo/mqtt-to-email/config/opc-router.rpe /inray/project.rpe &&
              cp -r /tmp/repo/mqtt-to-email/config/dashboard/* /dashboard/ &&
-             touch /init-done &&
-             tail -f /dev/null"
+             touch /init-done"
     volumes:
       - mosquitto-config:/mosquitto/config
       - opcrouter-config:/inray
       - dashboard:/dashboard
     networks:
       - stack-network
-    healthcheck:
-      test: ["CMD", "sh", "-c", "test -f /init-done"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    # healthcheck:
+    #   test: ["CMD", "sh", "-c", "test -f /init-done"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
 
 networks:
   stack-network:
