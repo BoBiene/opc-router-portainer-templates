@@ -250,7 +250,7 @@
       "logo": "https://raw.githubusercontent.com/BoBiene/opc-router-portainer-templates/main/images/opc-router-logo-500x500.png",
       "repository": {
         "url": "https://github.com/BoBiene/opc-router-portainer-templates",
-        "stackfile": "opc-ua-to-mssql-grafana/docker-compose.yml"
+        "stackfile": "opcua-mssql-grafana/docker-compose.yml"
       },
       "env": [
         {
