@@ -10,6 +10,8 @@ services:
     depends_on:
       init-config:
         condition: service_completed_successfully
+      mssql_setup:
+        condition: service_completed_successfully
     environment:
       - OR_I_ACCEPT_EULA=true
       - OR_IMPORT_SOURCE=/inray/project.rpe
@@ -25,10 +27,13 @@ services:
 
   umati:
     image: ghcr.io/umati/sample-server:v1.0.5
+    expose:
+      - "4840"
+    networks:
+      - stack-network
 
   grafana:
-    image: grafana/grafana-oss:9.0.5
-    restart: unless-stopped
+    image: grafana/grafana-oss:11.0.0
     ports:
       - 40630:3000
     environment: 
@@ -36,31 +41,47 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: ${INITIAL_PASSWORD}
     volumes:
       - grafana:/etc/grafana
+    networks:
+      - stack-network
     depends_on:
       mssql:
         condition: service_started
+      mssql_setup:
+        condition: service_completed_successfully
+      init-config:
+        condition: service_completed_successfully
 
   mssql:
     image: mcr.microsoft.com/mssql/server
-    restart: unless-stopped
+    expose:
+      - "1433"
+    depends_on:
+      init-config:
+        condition: service_completed_successfully
     environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "?Super3Secure2Password1!"
+    networks:
+      - stack-network
   
   mssql_setup:
     image: mcr.microsoft.com/mssql/server
-    restart: unless-stopped
+    
     entrypoint: /bin/bash
-    command: /opt/mssql/bin/setup.sh
+    command: /setup-config/mssql_setup.sh
     environment:
       MSSQL_HOST: "mssql"
       MSSQL_USERNAME: "SA"
       MSSQL_PASSWORD: "?Super3Secure2Password1!"
     volumes:
-      - ./mssql_setup.sh:/opt/mssql/bin/setup.sh
+      - mssql-config:/setup-config
+    networks:
+      - stack-network
     depends_on:
       mssql:
         condition: service_started
+      init-config:
+        condition: service_completed_successfully
 
   nginx:
     image: nginx:latest
@@ -68,8 +89,6 @@ services:
       - "40680:80"
     volumes:
       - dashboard:/usr/share/nginx/html:ro
-    networks:
-      - stack-network
     depends_on:
       - init-config
 
@@ -80,7 +99,9 @@ services:
              unzip -oq /tmp/umati-repo.zip -d /tmp &&
              cp /tmp/opc-ua-umati-mssql-grafana-main/umati.rpe /opcrouter/project.rpe &&
              cp /tmp/opc-ua-umati-mssql-grafana-main/mssql_setup.sh /mssql/mssql_setup.sh &&
+             sed -i '/sleep infinity/d' /mssql/mssql_setup.sh &&
              cp -r /tmp/opc-ua-umati-mssql-grafana-main/grafana/* /grafana/ &&
+             mkdir -p /grafana/dashboards &&
              cp /tmp/opc-ua-umati-mssql-grafana-main/grafana/MachineProductivity.json /grafana/dashboards/MachineProductivity.json &&
              wget https://github.com/BoBiene/opc-router-portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
              unzip -qo /tmp/repo.zip -d /tmp &&
@@ -90,8 +111,6 @@ services:
       - opcrouter-config:/opcrouter
       - dashboard:/dashboard
       - grafana:/grafana
-    networks:
-      - stack-network
 
 networks:
   stack-network:
